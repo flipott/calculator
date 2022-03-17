@@ -1,0 +1,66 @@
+body {
+    font-family: 'Source Code Pro', 500;
+}
+
+#main {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    font-size: 32px;
+    padding: 18px;
+    width: 82px;
+}
+
+#clear, #del {
+    width: 164px;
+}
+
+#screen {
+    width: 325px;
+    height: 155px;
+    background-color: lightblue;
+    border-radius: 1%;
+    margin-bottom: 5px;
+}
+
+ #calculator {
+     background-color: darkgray;
+     display: flex;
+     flex-direction: column;
+     padding: 18px;
+     border-radius: 3%;
+ }
+
+ #total-display {
+     font-size: 56px;
+     margin-bottom: 0px;
+ }
+
+ #current-input {
+     text-align: right;
+     font-size: 32px;
+     margin-top: 52px;
+ }
+
+ #buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#first-row, #second-row,
+#third-row, #fourth-row,
+#fifth-row {
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+
+
+
+
