@@ -19,8 +19,8 @@ button {
 
 #screen {
     width: 325px;
-    height: 155px;
-    background-color: lightblue;
+    height: 77px;
+    background-color: rgba(173, 216, 230, 0.712);
     border-radius: 1%;
     margin-bottom: 5px;
 }
@@ -33,9 +33,11 @@ button {
      border-radius: 3%;
  }
 
- #total-display {
+ #display {
      font-size: 56px;
      margin-bottom: 0px;
+     margin-top: 6px;
+     text-align: right;
  }
 
  #current-input {
