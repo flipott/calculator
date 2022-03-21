@@ -1,10 +1,14 @@
 const buttons = document.getElementById('buttons');
 const display = document.querySelector('#display')
 const operators = ['+', '-', 'x', '/']
-let currentInput = null;
+let nonValues = ['+', '-', 'x', '/', '=', 'clr', 'del']
+let currentInput = '';
 let firstValue = null;
+let secondValue = null;
+let runningValue = false;
 let operator = null;
-
+let opFlag = false;
+let inputHold = null;
 
 buttons.addEventListener('click', buttonClick)
 
@@ -16,51 +20,103 @@ function buttonClick(e) {
     }
 
     currentInput = e.target.value;
-    if (operator != null) {
-        display.textContent == ""}
-    
-    display.textContent += currentInput;
-    
-    if (currentInput == "=") {
-        equals()
+
+    if (opFlag == true) {
+        operationClear();
+    }
+
+    if (currentInput == 'clr') {
+        clear();
+    };
+
+    if (currentInput == 'del' && runningValue == false) {
+        display.textContent = display.textContent.slice(0, -1);
+    } else {
+        if (parseInt(currentInput) != NaN) {
+            display.textContent += currentInput;
+        }
+    }
+
+    displayLength(display.textContent)
+
+    if (currentInput == '=') {
+        equals();
     }
 
 
-    if (currentInput == "clr") {
-        clear();
-    } else if (currentInput == "del") {
-        display.textContent = display.textContent.slice(0,-4);
-    } else if (operators.includes(currentInput)) {
+
+
+    if (operators.includes(currentInput)) {
+        display.textContent = display.textContent.slice(0, -1);
         if (firstValue == null) {
-            operator = currentInput;
-            display.textContent = display.textContent.slice(0, -1);
             firstValue = parseInt(display.textContent);
+            opFlag = true;
+            operator = currentInput;
         } else {
-            equals();
-        }
+            runningTotal();
+        };
     } 
-
-
-
-
-
 };
 
 
+//Calculates total when the equals button is pressed
 function equals() {
-    secondValue = parseInt(display.textContent.slice(0, -1));
-    let total = operate(operator, firstValue, secondValue);
+    display.textContent = parseInt(display.textContent.slice(0, -1));
+    secondValue = parseInt(display.textContent);
+    total = operate(operator, firstValue, secondValue);
     display.textContent = total;
     firstValue = total;
+    runningValue = true;
     secondValue = null;
+    opFlag = true;
+    operator = null;
 }
 
+//Creates a running total if operation is continued after a single pair
+function runningTotal() {
+    if (runningValue == false) {
+        secondValue = parseInt(display.textContent);
+        console.log(firstValue)
+        console.log(secondValue);
+        total = operate(operator, firstValue, secondValue);
+        display.textContent = total;
+        firstValue = total;
+        operator = currentInput;
+        secondValue = null;
+        opFlag = true;
+    } else {
+        opFlag = true;
+        operator = currentInput;
+        runningValue = false;
+        display.textContent = firstValue.toString();
+    }
+}
 
+//Completely clears and resets values
 function clear() {
-    currentInput = null;
+    currentInput = '';
     display.textContent = '';
     firstValue = null;
     secondValue = null;
+}
+
+//Controls how the display and current input are handled if operator button is selected
+function operationClear() {
+    display.textContent = ''
+    opFlag = false;
+    if (operator == null && (nonValues.includes(currentInput) == false) ) { 
+        inputHold = currentInput;
+        clear();
+        currentInput = inputHold;
+    }
+}
+
+//Stops display from exceeding 14 characters
+function displayLength(string) {
+    if (string.length > 14) {
+        display.textContent = string.slice(0, -1);
+        return alert("Number cannot exceed 14 characters.");
+    }
 }
 
 
@@ -92,93 +148,3 @@ function operate(operator, a, b) {
     };
 };
 
-
-//     if (currentChoice == "clr") {
-//         clear();
-//     }
-
-//     if (firstValue == null) {
-//         currentInput.textContent += currentChoice;
-//     } else {
-//         currentInput.textContent == '';
-//     }
-
-//     if (totalDisplay.textContent !== "" && (operators.includes(currentChoice) == false)) {
-//         if (prevOperator == null) {
-//             clearOnTotal();
-//             console.log("Alert")
-//         };
-//     };
-
-
-//     if (currentChoice == "=") {
-//         equals();
-//     }
-
-
-//     if (operators.includes(currentChoice)) {
-//         if (firstValue == null) {
-//             firstValue = parseInt(currentInput.textContent);
-//             currentInput.textContent = firstValue;
-//             prevOperator = currentChoice;
-//         } else {
-//             secondValue = parseInt(currentInput.textContent);
-//             runningTotal = operate(prevOperator, firstValue, secondValue);
-//             totalDisplay.textContent = runningTotal;
-//             currentInput.textContent = '';
-//             firstValue = runningTotal;
-//             secondValue = null;
-//             prevOperator = currentChoice;
-//         };
-//     };
-    
-
-// })
-
-
-// function equals() {
-//     secondValue = parseInt(currentInput.textContent);
-//     finalTotal = operate(prevOperator, firstValue, secondValue);
-//     totalDisplay.textContent = finalTotal;
-//     currentInput.textContent = '';
-//     firstValue = finalTotal;
-//     secondValue = null;
-//     prevOperator = null;
-// }
-
-
-
-
-// let operator = "";
-// let currentChoice = "";
-// let firstValue;
-// let secondValue;
-// let prevOperator;
-
-
-
-
-
-
-
-
-
-// //Clears values minus current input
-// function clearOnTotal() {
-//     totalDisplay.textContent = '';
-//     operator = "";
-//     currentChoice = "";
-//     firstValue = null;
-//     secondValue = null; 
-// }
-
-
-// //Resets all values
-// function clear() {
-//     currentInput.textContent = '';
-//     totalDisplay.textContent = '';
-//     operator = "";
-//     currentChoice = "";
-//     firstValue = null;
-//     secondValue = null; 
-// 
