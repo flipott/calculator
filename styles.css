@@ -11,10 +11,23 @@ button {
     font-size: 32px;
     padding: 18px;
     width: 82px;
+    background-color: lightgray;
 }
 
 #clear, #del {
     width: 164px;
+}
+
+#clear {
+    background-color: coral;
+}
+
+#del {
+    background-color: rgb(165, 164, 113);
+}
+
+#equals {
+    background-color: rgb(107, 224, 158);
 }
 
 #screen {
@@ -24,6 +37,8 @@ button {
     border-radius: 1%;
     margin-bottom: 5px;
 }
+
+
 
  #calculator {
      background-color: darkgray;
