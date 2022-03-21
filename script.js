@@ -1,4 +1,5 @@
 const buttons = document.getElementById('buttons');
+const opButtons = document.querySelectorAll('#divide, #multiply, #subtract, #plus')
 const display = document.querySelector('#display')
 const operators = ['+', '-', 'x', '/']
 let nonValues = ['+', '-', 'x', '/', '=', 'clr', 'del']
@@ -15,44 +16,50 @@ buttons.addEventListener('click', buttonClick)
 function buttonClick(e) {
 
     const isButton = e.target.nodeName === 'BUTTON';
+    
     if (!isButton) {
       return;
     }
 
     currentInput = e.target.value;
 
-    if (opFlag == true) {
+    if (opFlag == true && currentInput != "del" && currentInput != "=") {
         operationClear();
     }
 
     if (currentInput == 'clr') {
         clear();
-    };
-
-    if (currentInput == 'del' && runningValue == false) {
-        display.textContent = display.textContent.slice(0, -1);
+    } else if (currentInput == 'del' && runningValue == false && (display.textContent != "NaN")) {
+        display.textContent = display.textContent.slice(0, -1)
     } else {
-        if (parseInt(currentInput) != NaN) {
+        if (currentInput != "del") {
             display.textContent += currentInput;
         }
     }
 
-    displayLength(display.textContent)
+    displayLength(display.textContent);
 
     if (currentInput == '=') {
         equals();
-    }
-
-
-
-
-    if (operators.includes(currentInput)) {
+    } else if (operators.includes(currentInput)) {
         display.textContent = display.textContent.slice(0, -1);
+
         if (firstValue == null) {
+            e.target.style.backgroundColor = 'lightblue'
+
             firstValue = parseInt(display.textContent);
+            
+            if (isNaN(firstValue)) {
+                e.target.style.backgroundColor = 'lightgray'
+                return clear()
+            }
+
             opFlag = true;
             operator = currentInput;
+
         } else {
+            colorClear()
+            e.target.style.backgroundColor = 'lightblue'
             runningTotal();
         };
     } 
@@ -61,29 +68,55 @@ function buttonClick(e) {
 
 //Calculates total when the equals button is pressed
 function equals() {
-    display.textContent = parseInt(display.textContent.slice(0, -1));
-    secondValue = parseInt(display.textContent);
-    total = operate(operator, firstValue, secondValue);
-    display.textContent = total;
-    firstValue = total;
-    runningValue = true;
-    secondValue = null;
-    opFlag = true;
-    operator = null;
+    if (firstValue != null) {
+        if (operator != null) {
+            display.textContent = parseInt(display.textContent.slice(0, -1));
+            secondValue = parseInt(display.textContent);
+            total = operate(operator, firstValue, secondValue);
+            display.textContent = total;
+            firstValue = total;
+            runningValue = true;
+            secondValue = null;
+            opFlag = true;
+            operator = null;
+            colorClear(); 
+            
+        } else {
+            display.textContent = parseInt(display.textContent.slice(0, -1));
+        }
+    } else if (display.textContent.length > 0)  {
+        opFlag = true;
+        if (display.textContent == "=") {
+            display.textContent = ''
+        } else {
+            display.textContent = parseInt(display.textContent.slice(0, -1));
+        }
+    }
 }
 
 //Creates a running total if operation is continued after a single pair
 function runningTotal() {
+
     if (runningValue == false) {
         secondValue = parseInt(display.textContent);
-        console.log(firstValue)
-        console.log(secondValue);
+
+        if (isNaN(firstValue)) {
+             clear()
+             return;
+        } else if (isNaN(secondValue)) {
+            operator = currentInput;
+            display.textContent = firstValue;
+            opFlag = true;
+            return;
+        }
+
         total = operate(operator, firstValue, secondValue);
         display.textContent = total;
         firstValue = total;
         operator = currentInput;
         secondValue = null;
         opFlag = true;
+
     } else {
         opFlag = true;
         operator = currentInput;
@@ -98,17 +131,21 @@ function clear() {
     display.textContent = '';
     firstValue = null;
     secondValue = null;
+    opFlag = false;
+    runningValue = false;
+    colorClear();
 }
 
 //Controls how the display and current input are handled if operator button is selected
 function operationClear() {
     display.textContent = ''
-    opFlag = false;
     if (operator == null && (nonValues.includes(currentInput) == false) ) { 
         inputHold = currentInput;
         clear();
         currentInput = inputHold;
     }
+    opFlag = false;
+
 }
 
 //Stops display from exceeding 14 characters
@@ -119,7 +156,7 @@ function displayLength(string) {
     }
 }
 
-
+//Basic math functions
 function add(a,b) {
     return a+b;
 };
@@ -148,3 +185,9 @@ function operate(operator, a, b) {
     };
 };
 
+function colorClear() {
+
+    for (item of opButtons) {
+        item.style.backgroundColor = 'lightgrey';
+    }
+}
