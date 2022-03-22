@@ -1,7 +1,7 @@
 
 
 body {
-    background-image: url(/images/wood.jpg);
+    background-image: url(./images/wood.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;
@@ -13,7 +13,7 @@ body {
 
 @font-face {
     font-family: 'digit';
-    src: url(/fonts/DS-DIGIT.TTF)
+    src: url(./fonts/DS-DIGIT.TTF)
 }
 
 #main {
