@@ -32,8 +32,12 @@ function buttonClick(e) {
     } else if (currentInput == 'del' && runningValue == false && (display.textContent != "NaN")) {
         display.textContent = display.textContent.slice(0, -1)
     } else {
-        if (currentInput != "del") {
+        if (currentInput != "del" && currentInput != ".") {
             display.textContent += currentInput;
+        } else if (currentInput == ".") {
+            if (display.textContent.includes(".") == false) {
+                display.textContent += currentInput;
+            }
         }
     }
 
@@ -42,14 +46,20 @@ function buttonClick(e) {
     if (currentInput == '=') {
         equals();
     } else if (operators.includes(currentInput)) {
-        display.textContent = display.textContent.slice(0, -1);
+        
+        
+        
+        if (operators.includes(display.textContent.slice(-1))) {
+            display.textContent = display.textContent.slice(0, -1);
+        }
+
 
         if (firstValue == null) {
             e.target.style.backgroundColor = 'lightblue'
 
-            firstValue = parseInt(display.textContent);
+            firstValue = display.textContent;
             
-            if (isNaN(firstValue)) {
+            if (isNaN(firstValue) || firstValue == '') {
                 e.target.style.backgroundColor = 'lightgray'
                 return clear()
             }
@@ -58,9 +68,9 @@ function buttonClick(e) {
             operator = currentInput;
 
         } else {
-            colorClear()
-            e.target.style.backgroundColor = 'lightblue'
-            runningTotal();
+                colorClear()
+                e.target.style.backgroundColor = 'lightblue'
+                runningTotal();
         };
     } 
 };
@@ -70,10 +80,11 @@ function buttonClick(e) {
 function equals() {
     if (firstValue != null) {
         if (operator != null) {
-            display.textContent = parseInt(display.textContent.slice(0, -1));
-            secondValue = parseInt(display.textContent);
+            display.textContent = display.textContent.slice(0, -1);
+            secondValue = display.textContent;
             total = operate(operator, firstValue, secondValue);
             display.textContent = total;
+            displayLength(total.toString());
             firstValue = total;
             runningValue = true;
             secondValue = null;
@@ -82,14 +93,14 @@ function equals() {
             colorClear(); 
             
         } else {
-            display.textContent = parseInt(display.textContent.slice(0, -1));
+            display.textContent = numRound(display.textContent.slice(0, -1));
         }
     } else if (display.textContent.length > 0)  {
         opFlag = true;
         if (display.textContent == "=") {
             display.textContent = ''
         } else {
-            display.textContent = parseInt(display.textContent.slice(0, -1));
+            display.textContent = numRound(display.textContent.slice(0, -1));
         }
     }
 }
@@ -98,12 +109,12 @@ function equals() {
 function runningTotal() {
 
     if (runningValue == false) {
-        secondValue = parseInt(display.textContent);
-
+        secondValue = display.textContent;
+ 
         if (isNaN(firstValue)) {
              clear()
              return;
-        } else if (isNaN(secondValue)) {
+        } else if (isNaN(secondValue) || secondValue == '') {
             operator = currentInput;
             display.textContent = firstValue;
             opFlag = true;
@@ -121,7 +132,7 @@ function runningTotal() {
         opFlag = true;
         operator = currentInput;
         runningValue = false;
-        display.textContent = firstValue.toString();
+        display.textContent = firstValue;
     }
 }
 
@@ -151,8 +162,8 @@ function operationClear() {
 //Stops display from exceeding 14 characters
 function displayLength(string) {
     if (string.length > 14) {
-        display.textContent = string.slice(0, -1);
-        return alert("Number cannot exceed 14 characters.");
+        // display.textContent = string.slice(0, -1);
+        display.textContent = string.substring(0,13);
     }
 }
 
@@ -174,14 +185,16 @@ function divide(a,b) {
 };
 
 function operate(operator, a, b) {
+    a = parseFloat(a);
+    b = parseFloat(b);
     if (operator === "+") {
-        return add(a,b);
+        return numRound(add(a,b));
     } else if (operator === "-") {
-        return subtract(a,b);
+        return numRound(subtract(a,b));
     } else if (operator === "x") {
-        return multiply(a,b);
+        return numRound(multiply(a,b));
     } else if (operator === "/") {
-        return divide(a,b);
+        return numRound(divide(a,b));
     };
 };
 
@@ -191,3 +204,10 @@ function colorClear() {
         item.style.backgroundColor = 'lightgrey';
     }
 }
+
+function numRound(numStr) {
+    roundNum = parseFloat(numStr)
+    return parseFloat(roundNum.toFixed(7));
+}
+
+
