@@ -23,17 +23,20 @@ function buttonClick(e) {
 
     currentInput = e.target.value;
 
-    if (opFlag == true && currentInput != "del" && currentInput != "=") {
+    if (opFlag == true && currentInput != "del" && currentInput != "=" && firstValue != null || display.textContent == "DIV/0 ERROR") {
         operationClear();
     }
 
     if (currentInput == 'clr') {
         clear();
-    } else if (currentInput == 'del' && runningValue == false && (display.textContent != "NaN")) {
+    } else if (currentInput == 'del' && runningValue == false && (display.textContent != "NaN" && (operators.includes(inputHold) == false))) {
         display.textContent = display.textContent.slice(0, -1)
     } else {
         if (currentInput != "del" && currentInput != ".") {
             display.textContent += currentInput;
+            if (currentInput != "=") {
+                inputHold = currentInput;
+            }
         } else if (currentInput == ".") {
             if (display.textContent.includes(".") == false) {
                 display.textContent += currentInput;
@@ -47,7 +50,7 @@ function buttonClick(e) {
         equals();
     } else if (operators.includes(currentInput)) {
         
-        
+        inputHold = currentInput;
         
         if (operators.includes(display.textContent.slice(-1))) {
             display.textContent = display.textContent.slice(0, -1);
@@ -55,9 +58,10 @@ function buttonClick(e) {
 
 
         if (firstValue == null) {
-            e.target.style.backgroundColor = 'lightblue'
+            e.target.style.backgroundColor = 'darkgray'
 
             firstValue = display.textContent;
+            displayLength(display.textContent);
             
             if (isNaN(firstValue) || firstValue == '') {
                 e.target.style.backgroundColor = 'lightgray'
@@ -69,8 +73,10 @@ function buttonClick(e) {
 
         } else {
                 colorClear()
-                e.target.style.backgroundColor = 'lightblue'
+                e.target.style.backgroundColor = 'darkgray'
                 runningTotal();
+                displayLength(display.textContent);
+
         };
     } 
 };
@@ -78,13 +84,26 @@ function buttonClick(e) {
 
 //Calculates total when the equals button is pressed
 function equals() {
+
+
+
+    //Returns original input if operator then "=" is selected
+    if (operators.includes(inputHold)) {
+        display.textContent = display.textContent.slice(0,-1);
+        colorClear();
+        return;
+    }
+
     if (firstValue != null) {
         if (operator != null) {
             display.textContent = display.textContent.slice(0, -1);
             secondValue = display.textContent;
+            if (secondValue == 0 && operator == "/") {
+                return divZero();
+            }
             total = operate(operator, firstValue, secondValue);
             display.textContent = total;
-            displayLength(total.toString());
+            displayLength(display.textContent);
             firstValue = total;
             runningValue = true;
             secondValue = null;
@@ -110,6 +129,10 @@ function runningTotal() {
 
     if (runningValue == false) {
         secondValue = display.textContent;
+
+        if (secondValue == 0 && operator == "/") {
+            return divZero();
+        }
  
         if (isNaN(firstValue)) {
              clear()
@@ -117,12 +140,14 @@ function runningTotal() {
         } else if (isNaN(secondValue) || secondValue == '') {
             operator = currentInput;
             display.textContent = firstValue;
+            displayLength(display.textContent);
             opFlag = true;
             return;
         }
 
         total = operate(operator, firstValue, secondValue);
         display.textContent = total;
+        displayLength(display.textContent);
         firstValue = total;
         operator = currentInput;
         secondValue = null;
@@ -134,6 +159,14 @@ function runningTotal() {
         runningValue = false;
         display.textContent = firstValue;
     }
+}
+
+function divZero() {
+    display.textContent = "DIV/0 ERROR"
+    firstValue = null;
+    secondValue = null;
+    colorClear()
+    return;
 }
 
 //Completely clears and resets values
@@ -154,6 +187,7 @@ function operationClear() {
         inputHold = currentInput;
         clear();
         currentInput = inputHold;
+        inputHold = null;
     }
     opFlag = false;
 
