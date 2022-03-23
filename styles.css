@@ -1,9 +1,8 @@
 
 
 body {
-    background-image: url(./images/wood.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(121,9,57,1) 30%, rgba(22,174,218,1) 100%, rgba(0,212,255,1) 100%); 
     display: flex;
     justify-content: center;
     width: 100%;
@@ -27,28 +26,54 @@ button {
     padding: 18px;
     width: 82px;
     background-color: lightgray;
+    border-right: 1px solid;
+    border-bottom: none;
+    border-left: none;
+    border-top: none;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
+button:hover {
+    background-color: darkgray;
+}
+
+#del, #divide, #multiply, #subtract, #plus {
+    border-right: none;
+}
+
+#divide:hover, #multiply:hover, #subtract:hover, #plus:hover {
+    background-color: darkgray!important;
+}
+
+
 
 #clear, #del {
     width: 164px;
 }
 
 #clear {
-    background-color: coral;
+    background-color: rgba(121,9,57,1);
+    color: white;
+    border-right: rgb(37, 37, 37);
+}
+
+#clear:hover, #del:hover, #equals:hover {
+    background-color: rgba(25, 32, 32, 0.863);
 }
 
 #del {
-    background-color: rgb(165, 164, 113);
+    background-color: rgb(0, 142, 170);
+    color: white;
 }
 
 #equals {
-    background-color: rgb(107, 224, 158);
+    background-color: rgba(2,0,36,1);
+    color: white;
 }
 
 #screen {
     width: 325px;
     height: 77px;
-    background-color: rgba(173, 216, 230, 0.712);
+    background-color: rgba(25, 32, 32, 0.863);
     border-radius: 1%;
     margin-bottom: 5px;
 }
@@ -56,30 +81,33 @@ button {
 
 
  #calculator {
-     background-color: rgb(121, 120, 120);
-     display: flex;
-     flex-direction: column;
-     padding: 18px;
-     border-radius: 3%;
-     align-self: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: rgb(121, 120, 120);
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+    border-radius: 3%;
+    align-self: center;
  }
 
  #display {
-     font-family: digit;
-     font-size: 50px;
-     margin-bottom: 0px;
-     margin-top: 12px;
-     margin-right: 8px;
-     text-align: right;
+    font-family: digit;
+    color: lightgray;
+    font-size: 50px;
+    margin-bottom: 0px;
+    margin-top: 12px;
+    margin-right: 8px;
+    text-align: right;
  }
 
  #current-input {
-     text-align: right;
-     font-size: 32px;
-     margin-top: 52px;
+    text-align: right;
+    font-size: 32px;
+    margin-top: 52px;
  }
 
  #buttons {
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     gap: 2px;
