@@ -12,7 +12,7 @@ body {
 
 @font-face {
     font-family: 'digit';
-    src: url(./fonts/DS-DIGIT.TTF)
+    src: url(./fonts/DS-DIGIT.TTF);
 }
 
 #main {
@@ -32,6 +32,7 @@ button {
     border-top: none;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
+
 button:hover {
     background-color: darkgray;
 }
@@ -43,8 +44,6 @@ button:hover {
 #divide:hover, #multiply:hover, #subtract:hover, #plus:hover {
     background-color: darkgray!important;
 }
-
-
 
 #clear, #del {
     width: 164px;
@@ -78,8 +77,6 @@ button:hover {
     margin-bottom: 5px;
 }
 
-
-
  #calculator {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: rgb(121, 120, 120);
@@ -91,7 +88,7 @@ button:hover {
  }
 
  #display {
-    font-family: digit;
+    font-family: 'digit';
     color: lightgray;
     font-size: 50px;
     margin-bottom: 0px;
@@ -119,11 +116,3 @@ button:hover {
     display: flex;
     justify-content: center;
 }
-
-
-
-
-
-
-
-
