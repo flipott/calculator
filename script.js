@@ -1,8 +1,11 @@
+//Select DOM elements
 const buttons = document.getElementById('buttons');
 const opButtons = document.querySelectorAll('#divide, #multiply, #subtract, #plus')
 const display = document.querySelector('#display')
 const operators = ['+', '-', 'x', '/']
-let nonValues = ['+', '-', 'x', '/', '=', 'clr', 'del']
+const nonValues = ['+', '-', 'x', '/', '=', 'clr', 'del']
+
+//Initalize variables
 let currentInput = '';
 let firstValue = null;
 let secondValue = null;
@@ -14,6 +17,7 @@ let inputHold = null;
 buttons.addEventListener('click', buttonClick);
 document.addEventListener('keydown', keyButton);
 
+//Performs calculator functions when a button is clicked
 function buttonClick(e) {
     if (!e.target) {
         currentInput = e.value;
@@ -23,24 +27,24 @@ function buttonClick(e) {
           return;
         };
         currentInput = e.target.value;
-    }
+    };
     
-    if (opFlag == true && currentInput != "del" && currentInput != "=" && firstValue != null || display.textContent == "DIV/0 ERROR") {
+    if (opFlag == true && currentInput != 'del' && currentInput != '=' && firstValue != null || display.textContent == 'DIV/0 ERROR') {
         operationClear();
-    }
+    };
 
     if (currentInput == 'clr') {
         clear();
-    } else if (currentInput == 'del' && runningValue == false && (display.textContent != "NaN" && (operators.includes(inputHold) == false))) {
+    } else if (currentInput == 'del' && runningValue == false && (display.textContent != 'NaN' && (operators.includes(inputHold) == false))) {
         display.textContent = display.textContent.slice(0, -1);
     } else {
-        if (currentInput != "del" && currentInput != "." && (display.textContent.length < 12)) {
+        if (currentInput != 'del' && currentInput != '.' && (display.textContent.length < 12)) {
             display.textContent += currentInput;
-            if (currentInput != "=") {
+            if (currentInput != '=') {
                 inputHold = currentInput;
-            }
-        } else if (currentInput == ".") {
-            if (display.textContent.includes(".") == false && (display.textContent.length < 12)) {
+            };
+        } else if (currentInput == '.') {
+            if (display.textContent.includes('.') == false && (display.textContent.length < 12)) {
                 display.textContent += currentInput;
             };
         };
@@ -54,15 +58,15 @@ function buttonClick(e) {
         inputHold = currentInput;
         if (operators.includes(display.textContent.slice(-1))) {
             display.textContent = display.textContent.slice(0, -1);
-        }
+        };
 
         if (firstValue == null) {
-            document.querySelectorAll(`[value = "${currentInput}"]`)[0].style.backgroundColor = "darkgray";
+            document.querySelectorAll(`[value = "${currentInput}"]`)[0].style.backgroundColor = 'darkgray';
             firstValue = display.textContent;
             displayLength(display.textContent);
         
             if (isNaN(firstValue) || firstValue == '') {
-                document.querySelectorAll(`[value = "${currentInput}"]`)[0].style.backgroundColor = "lightgray";
+                document.querySelectorAll(`[value = "${currentInput}"]`)[0].style.backgroundColor = 'lightgray';
                 return clear()
             };
             opFlag = true;
@@ -70,32 +74,30 @@ function buttonClick(e) {
 
         } else {
                 colorClear()
-                document.querySelectorAll(`[value = "${currentInput}"]`)[0].style.backgroundColor = "darkgray";
+                document.querySelectorAll(`[value = "${currentInput}"]`)[0].style.backgroundColor = 'darkgray';
                 runningTotal();
                 displayLength(display.textContent);
         };
     };
 }
 
-
 //Calculates total when the equals button is pressed
 function equals() {
-    //Returns original input if operator then "=" is selected
+
+    //Returns original input if operator then '=' is selected
     if (operators.includes(inputHold)) {
-        display.textContent = display.textContent.slice(0,-1);
+        displayLength(display.textContent);
         colorClear();
         return;
     };
 
     if (firstValue != null) {
         if (operator != null) {
-            display.textContent = display.textContent.slice(0, -1);
+            display.textContent = display.textContent;
             secondValue = display.textContent;
-
-            if (parseInt(secondValue) === 0 && operator == "/") {
+            if (parseInt(secondValue) === 0 && operator == '/') {
                 return divZero();
-            }
-
+            };
             total = operate(operator, firstValue, secondValue);
             display.textContent = total;
             displayLength(display.textContent);
@@ -105,41 +107,38 @@ function equals() {
             opFlag = true;
             operator = null;
             colorClear(); 
-            
         } else {
-            display.textContent = numRound(display.textContent.slice(0, -1));
-        }
+            displayLength(display.textContent);            
+        };
     } else if (display.textContent.length > 0)  {
         opFlag = true;
-        if (display.textContent == "=") {
-            display.textContent = ''
+        if (display.textContent == '=') {
+            display.textContent = '';
         } else {
-            display.textContent = numRound(display.textContent.slice(0, -1));
-        }
-    }
+            displayLength(display.textContent);
+        };
+    };
 }
 
 //Creates a running total if operation is continued after a single pair
 function runningTotal() {
-
     if (runningValue == false) {
         secondValue = display.textContent;
 
-        if (parseInt(secondValue) === 0 && operator == "/") {
+        if (parseInt(secondValue) === 0 && operator == '/') {
             return divZero();
-        }
- 
+        };
+
         if (isNaN(firstValue)) {
-             clear()
-             return;
+            clear()
+            return;
         } else if (isNaN(secondValue) || secondValue == '') {
             operator = currentInput;
             display.textContent = firstValue;
             displayLength(display.textContent);
             opFlag = true;
             return;
-        }
-
+        };
         total = operate(operator, firstValue, secondValue);
         display.textContent = total;
         displayLength(display.textContent);
@@ -147,26 +146,24 @@ function runningTotal() {
         operator = currentInput;
         secondValue = null;
         opFlag = true;
-
     } else {
         opFlag = true;
         operator = currentInput;
         runningValue = false;
         display.textContent = firstValue;
-    }
+    };
 }
-
 
 //Returns an error if the user tries to divide by 0
 function divZero() {
-    display.textContent = "DIV/0 ERROR"
+    display.textContent = 'DIV/0 ERROR'
     firstValue = null;
     secondValue = null;
-    colorClear()
+    colorClear();
     return;
 }
 
-//Completely clears and resets values
+//Clears and resets values
 function clear() {
     currentInput = '';
     display.textContent = '';
@@ -174,6 +171,7 @@ function clear() {
     secondValue = null;
     opFlag = false;
     runningValue = false;
+    operator = null;
     colorClear();
 }
 
@@ -185,16 +183,30 @@ function operationClear() {
         clear();
         currentInput = inputHold;
         inputHold = null;
-    }
+    };
     opFlag = false;
-
 }
 
-//Stops display from exceeding 14 characters
+//Stops display from exceeding screen length
 function displayLength(string) {
-    if (string.length > 12) {
+    if (string.includes('=')) {
+        display.textContent = string.slice(0, -1);
+    } else if (string.length > 12) {
         display.textContent = string.substring(0,13);
-    }
+    }; 
+}
+
+//Rounds number so screen doesn't overflow
+function numRound(numStr) {
+    roundNum = parseFloat(numStr);
+    return parseFloat(roundNum.toFixed(7));
+}
+
+//Resets button colors to default value
+function colorClear() {
+    for (item of opButtons) {
+        item.style.backgroundColor = 'lightgrey';
+    };
 }
 
 //Basic math functions
@@ -217,27 +229,15 @@ function divide(a,b) {
 function operate(operator, a, b) {
     a = parseFloat(a);
     b = parseFloat(b);
-    if (operator === "+") {
+    if (operator === '+') {
         return numRound(add(a,b));
-    } else if (operator === "-") {
+    } else if (operator === '-') {
         return numRound(subtract(a,b));
-    } else if (operator === "x") {
+    } else if (operator === 'x') {
         return numRound(multiply(a,b));
-    } else if (operator === "/") {
+    } else if (operator === '/') {
         return numRound(divide(a,b));
     };
-}
-
-//Resets colors once numbers are calculated
-function colorClear() {
-    for (item of opButtons) {
-        item.style.backgroundColor = 'lightgrey';
-    }
-}
-
-function numRound(numStr) {
-    roundNum = parseFloat(numStr);
-    return parseFloat(roundNum.toFixed(7));
 }
 
 //Binds keypresses to button clicks
@@ -282,7 +282,8 @@ function keyButton(e) {
                 break;
             } else {
                 buttonClick(document.getElementById('eight'));
-                break;}
+                break;
+            };
         case 57:
         case 105:
             buttonClick(document.getElementById('nine'));
@@ -298,22 +299,32 @@ function keyButton(e) {
         case 111:
             buttonClick(document.getElementById('divide'));
             break;
+        case 56:
+            if (e.shiftKey === true) {
+                buttonClick(document.getElementById('multiply'));
+                break;
+            } else {
+                buttonClick(document.getElementById('eight'));
+                break;
+            };
         case 88:
         case 106:
             buttonClick(document.getElementById('multiply'));
             break;
         case 173:
         case 109:
+        case 189:
             buttonClick(document.getElementById('subtract'));
             break;
         case 61:
+        case 187:
             if (e.shiftKey === true) {
                 buttonClick(document.getElementById('plus'));
                 break;
             } else {
                 buttonClick(document.getElementById('equals'));
                 break;
-            }
+            };
         case 107:
             buttonClick(document.getElementById('plus'));
             break;
